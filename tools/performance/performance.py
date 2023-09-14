@@ -38,7 +38,7 @@ def draw_line_chart(methods, dims, data, figure_name, y_label, title):
     # plt.hlines(y=100, xmin=dims_str[0], xmax=dims_str[-1], colors='r', linestyles='-.')
     plt.grid(True, linestyle='-.')
 
-    plt.xlabel('Prompt Fraction / %', fontdict={'size': '30'})
+    plt.xlabel('Prefill Fraction / %', fontdict={'size': '30'})
     plt.ylabel(y_label, fontdict={'size': '30'})
     plt.title(title, fontdict={'size': '30'})
     plt.legend(methods, loc='best', prop={'size': '30'})

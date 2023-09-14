@@ -1,5 +1,5 @@
 # Flash Attention Inference
-Performance of the C++ interface of flash attention and flash attention v2 in large language model (LLM) inference scenarios. The calculation expression is as follows, where the precision of tensor Q, K, V and O is FP16. Remove redundant code from flash attention that has nothing to do with inference, such as backward, dropout and bf16 etc.
+Performance of the C++ interface of flash attention and flash attention v2 in large language model (LLM) inference scenarios. The calculation expression is as follows, where the precision of tensor Q, K, V and O is FP16. Remove redundant code from flash attention that has nothing to do with inference, such as backward, dropout, bf16 and torch dependencies, so you can easily integrate flash attention into LLM inference programs.
 ```
 O = Softmax(Q * K^T) * V
 ```
@@ -8,7 +8,8 @@ O = Softmax(Q * K^T) * V
 
 # Support
 - GQA/MQA Inference: Group Query Attention / Multi Query Attention Inference
-- Hybrid Inference: Hybrid Inference by Prompt and Generator
+- Hybrid Inference: Hybrid Inference by Prefill and Decoding
+- ALiBi Inference: Attention with Linear Biases
 
 # Compile
 ## Environment
@@ -59,14 +60,14 @@ cd tools/performance
 - Head Num: 32
 - Head Dim: 128
 
-### Prompt
+### Prefill
 #### Seq
 The performance of both is similar for short sequences and Flash Attention v2 performs well in long sequences. It can increase by about 50%.
 - Batch Size: 128
 - Seq Q: Seq
 - Seq K: Seq
 
-![prompt_seq](./performance/RTX3090/prompt_seq.png)
+![prefill_seq](./performance/RTX3090/prefill_seq.png)
 
 #### Batch
 When the Batch is small, the Flash Attention v2 performance is better. When the Batch is large, the performance of the two kernels is comparable.
@@ -74,16 +75,16 @@ When the Batch is small, the Flash Attention v2 performance is better. When the 
 - Seq Q: 128
 - Seq K: 128
 
-![prompt_batch](./performance/RTX3090/prompt_batch.png)
+![prefill_batch](./performance/RTX3090/prefill_batch.png)
 
-### Generator
+### Decoding
 #### Seq
 The performance of both is similar for short sequences and Flash Attention performs well in long sequences.
 - Batch Size: 128
 - Seq Q: 1
 - Seq K: Seq
 
-![generator_seq](./performance/RTX3090/generator_seq.png)
+![decoding_seq](./performance/RTX3090/decoding_seq.png)
 
 #### Batch
 The Flash Attention performance is better regardless of the size of the Batch.
@@ -91,10 +92,10 @@ The Flash Attention performance is better regardless of the size of the Batch.
 - Seq Q: 1
 - Seq K: 128
 
-![generator_batch](./performance/RTX3090/generator_batch.png)
+![decoding_batch](./performance/RTX3090/decoding_batch.png)
 
 ### Hybrid
-Regardless of the ratio of Prompt to Generator, Flash Attention and Flash Attention v2 are similar in performance.
+Regardless of the ratio of Prefill to Decoding, Flash Attention and Flash Attention v2 are similar in performance.
 - Batch Size: 100
 - Seq Q: 128
 - Seq K: 128
@@ -108,6 +109,3 @@ Regardless of the ratio of Prompt to Generator, Flash Attention and Flash Attent
 
 ## [cutlass](https://github.com/NVIDIA/cutlass)
 - cutlass: v3.1.0
-
-# TODO
-- ALiBi Inference

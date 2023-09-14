@@ -98,7 +98,7 @@ public:
 private:
     const std::vector<size_t> m_shape;
     const std::string m_name = "Tensor";
-    // the threshold of the random matrix will affect the difference of the attention results
+    // the threshold of the random tensor will affect the difference of the attention results
     const float m_min = -1.0;
     const float m_max = 1.0;
 
