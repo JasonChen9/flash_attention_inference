@@ -38,7 +38,7 @@ def draw_line_chart(methods, dims, data, figure_name, y_label, title):
     # plt.hlines(y=100, xmin=dims_str[0], xmax=dims_str[-1], colors='r', linestyles='-.')
     plt.grid(True, linestyle='-.')
 
-    plt.xlabel('batch', fontdict={'size': '30'})
+    plt.xlabel('length', fontdict={'size': '30'})
     plt.ylabel(y_label, fontdict={'size': '30'})
     plt.title(title, fontdict={'size': '30'})
     plt.legend(methods, loc='best', prop={'size': '30'})
@@ -52,7 +52,7 @@ def read_data(methods, dims, data_path, log_files):
     data_performance = np.zeros((len(methods), len(dims)), np.float64)
 
     for log_file in log_files:
-        dim = int((log_file.split('.')[0]).split('_')[1])
+        dim = int((log_file.split('.')[0]).split('_')[2])
         with open(data_path + log_file) as fp:
             line = fp.readline()
             while line:
@@ -73,7 +73,7 @@ def get_dims(log_files):
     dims = []
 
     for log_file in log_files:
-        dims.append(int((log_file.split('.')[0]).split('_')[1]))
+        dims.append(int((log_file.split('.')[0]).split('_')[2]))
 
     dims.sort()
 
@@ -108,16 +108,16 @@ def analyze_data(data_path):
     data_throughput, data_performance = read_data(
         methods, dims, data_path, log_files)
     draw_line_chart(methods, dims, data_throughput, data_path +
-                    'flash_attention_throughput.png', 'Throughput / TFLOPS', 'Flash Attention Throughput(len=128)')
+                    'flash_attention_throughput.png', 'Throughput / TFLOPS', 'Flash Attention Throughput(batch=16)')
     draw_line_chart(methods, dims, data_performance, data_path + 'flash_attention_performance.png',
-                    'Performance Compared with Flash Attention / %', 'Flash Attention Performance(len=128)')
+                    'Performance Compared with Flash Attention / %', 'Flash Attention Performance(batch=16)')
 
 
 def main():
     usage = "python3 performance.py -p/--path log/"
     parser = optparse.OptionParser(usage)
     parser.add_option('-p', '--path', dest='path',
-                      type='string', help='data path', default='log')
+                      type='string', help='data path', default='log/')
 
     options, args = parser.parse_args()
     path = options.path
