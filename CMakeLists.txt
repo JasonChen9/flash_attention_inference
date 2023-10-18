@@ -7,6 +7,7 @@
 cmake_minimum_required (VERSION 3.12)
 
 project (flash_attention_inference LANGUAGES C CXX CUDA)
+set (CMAKE_CUDA_ARCHITECTURES 75)
 
 set (CMAKE_VERBOSE_MAKEFILE ${FAI_VERBOSE_MAKEFILE})
 
